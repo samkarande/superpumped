@@ -1,0 +1,568 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flagged Rides Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .tabs {
+            overflow: hidden;
+            border-bottom: 1px solid #ccc;
+        }
+        .tabs button {
+            background-color: #f1f1f1;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+        .tabs button:hover {
+            background-color: #ddd;
+        }
+        .tabs button.active {
+            background-color: #ccc;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .fetch-button {
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .fetch-button:hover {
+            background-color: #45a049;
+        }
+        .action-button {
+            padding: 8px 16px;
+            margin-right: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .action-button:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            margin-bottom: 20px;
+        }
+        .loading {
+            color: blue;
+            margin-bottom: 20px;
+        }
+        .header-text {
+            margin-bottom: 20px;
+        }
+        .header-text pre {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .ride-id-selector {
+            margin-bottom: 20px;
+        }
+        .ride-id-selector label {
+            margin-right: 10px;
+        }
+        .ride-id-selector select {
+            padding: 8px;
+            font-size: 16px;
+        }
+        .details-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-text">
+        <h1>US Support for Flagged Rides</h1>
+        <pre>
+Skyflow table - 'ride'
+Security policy:
+ALLOW READ ON ride.* WITH REDACTION = PLAIN_TEXT WHERE ride.flagged = true
+ALLOW UPDATE ON ride.* WHERE ride.flagged = true
+        </pre>
+    </div>
+    <div class="tabs">
+        <button class="tab-button active" onclick="openTab(event, 'flagged-rides')">Flagged Rides</button>
+        <button class="tab-button" onclick="openTab(event, 'superpumped-analyst')">Superpumped Analyst</button>
+        <button class="tab-button" onclick="openTab(event, 'tab3')">Tab 3</button>
+        <button class="tab-button" onclick="openTab(event, 'tab4')">Tab 4</button>
+    </div>
+
+    <div id="flagged-rides" class="tab-content active">
+        <h2>Flagged Rides</h2>
+        <button class="fetch-button" onclick="fetchFlaggedRides()">Refresh Data</button>
+        <div class="ride-id-selector">
+            <label for="ride-id">Select Ride ID:</label>
+            <select id="ride-id" onchange="clearDetails()">
+                <option value="">Select a Ride ID</option>
+            </select>
+            <button class="action-button" onclick="fetchDriverDetails()">Get Driver Details</button>
+            <button class="action-button" onclick="fetchPassengerDetails()">Get Passenger Details</button>
+        </div>
+        <div id="loading" class="loading" style="display: none;">Loading...</div>
+        <div id="error" class="error" style="display: none;"></div>
+        <div id="details" class="details-container"></div>
+        <table id="rides-table">
+            <thead>
+                <tr>
+                    <th>Ride ID</th>
+                    <th>Driver ID</th>
+                    <th>Passenger ID</th>
+                    <th>Start Address</th>
+                    <th>End Address</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Driver Phone</th>
+                    <th>Passenger Phone</th>
+                    <th>Country</th>
+                    <th>State</th>
+                    <th>Zipcode</th>
+                    <th>Active</th>
+                    <th>Flagged</th>
+                    <th>Skyflow ID</th>
+                </tr>
+            </thead>
+            <tbody id="rides-table-body"></tbody>
+        </table>
+    </div>
+
+    <div id="superpumped-analyst" class="tab-content">
+        <h2>Superpumped Analyst</h2>
+        <button class="fetch-button" onclick="fetchCompletedRides()">Refresh Data</button>
+        <div id="analyst-loading" class="loading" style="display: none;">Loading...</div>
+        <div id="analyst-error" class="error" style="display: none;"></div>
+        
+        <h3>Driver Ride Counts</h3>
+        <table id="driver-count-table">
+            <thead>
+                <tr>
+                    <th>Driver ID</th>
+                    <th>Number of Rides</th>
+                </tr>
+            </thead>
+            <tbody id="driver-count-table-body"></tbody>
+        </table>
+
+        <h3>Passenger Ride Counts</h3>
+        <table id="passenger-count-table">
+            <thead>
+                <tr>
+                    <th>Passenger ID</th>
+                    <th>Number of Rides</th>
+                </tr>
+            </thead>
+            <tbody id="passenger-count-table-body"></tbody>
+        </table>
+
+        <h3>Zipcode Ride Counts</h3>
+        <table id="zipcode-count-table">
+            <thead>
+                <tr>
+                    <th>Zipcode</th>
+                    <th>Number of Rides</th>
+                </tr>
+            </thead>
+            <tbody id="zipcode-count-table-body"></tbody>
+        </table>
+
+        <h3>Completed Ride Details</h3>
+        <table id="completed-rides-table">
+            <thead>
+                <tr>
+                    <th>Ride ID</th>
+                    <th>Driver ID</th>
+                    <th>Passenger ID</th>
+                    <th>Start Address</th>
+                    <th>End Address</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Driver Phone</th>
+                    <th>Passenger Phone</th>
+                    <th>Country</th>
+                    <th>State</th>
+                    <th>Zipcode</th>
+                    <th>Active</th>
+                    <th>Flagged</th>
+                    <th>Skyflow ID</th>
+                </tr>
+            </thead>
+            <tbody id="completed-rides-table-body"></tbody>
+        </table>
+    </div>
+
+    <div id="tab3" class="tab-content">
+        <h2>Tab 3</h2>
+        <p>Content for Tab 3 goes here.</p>
+    </div>
+    <div id="tab4" class="tab-content">
+        <h2>Tab 4</h2>
+        <p>Content for Tab 4 goes here.</p>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'https://expert-fortnight-r9gj5wvq7rh56v7-8000.app.github.dev';
+
+        // Tab navigation
+        function openTab(event, tabName) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            const tabButtons = document.getElementsByClassName("tab-button");
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            event.currentTarget.classList.add("active");
+        }
+
+        // Fetch and display flagged rides
+        async function fetchFlaggedRides() {
+            const tableBody = document.getElementById("rides-table-body");
+            const errorDiv = document.getElementById("error");
+            const loadingDiv = document.getElementById("loading");
+            const rideIdSelect = document.getElementById("ride-id");
+
+            tableBody.innerHTML = "";
+            rideIdSelect.innerHTML = "<option value=''>Select a Ride ID</option>";
+            errorDiv.style.display = "none";
+            loadingDiv.style.display = "block";
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/flagged_rides`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log("Flagged Rides Data:", data); // Debugging log
+                loadingDiv.style.display = "none";
+
+                if (data.records && Array.isArray(data.records) && data.records.length > 0) {
+                    data.records.forEach(record => {
+                        if (!record.fields) {
+                            console.error("Missing fields in record:", record);
+                            return;
+                        }
+                        const fields = record.fields;
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${fields.rideid || 'N/A'}</td>
+                            <td>${fields.driverid || 'N/A'}</td>
+                            <td>${fields.passengerid || 'N/A'}</td>
+                            <td>${fields.startaddress || 'N/A'}</td>
+                            <td>${fields.endaddress || 'N/A'}</td>
+                            <td>${fields.ridestarttime ? new Date(fields.ridestarttime).toLocaleString() : 'N/A'}</td>
+                            <td>${fields.rideendtime ? new Date(fields.rideendtime).toLocaleString() : 'N/A'}</td>
+                            <td>${fields.drivephone || 'N/A'}</td>
+                            <td>${fields.passengerphone || 'N/A'}</td>
+                            <td>${fields.country || 'N/A'}</td>
+                            <td>${fields.state || 'N/A'}</td>
+                            <td>${fields.zipcode || 'N/A'}</td>
+                            <td>${fields.active !== undefined ? fields.active : 'N/A'}</td>
+                            <td>${fields.flagged !== undefined ? fields.flagged : 'N/A'}</td>
+                            <td>${fields.skyflow_id || 'N/A'}</td>
+                        `;
+                        tableBody.appendChild(row);
+
+                        // Populate ride ID dropdown
+                        const option = document.createElement("option");
+                        option.value = fields.rideid || '';
+                        option.textContent = fields.rideid || 'Unknown';
+                        rideIdSelect.appendChild(option);
+                    });
+                } else {
+                    errorDiv.textContent = "No flagged rides found.";
+                    errorDiv.style.display = "block";
+                }
+            } catch (error) {
+                loadingDiv.style.display = "none";
+                errorDiv.textContent = `Error fetching data: ${error.message}`;
+                errorDiv.style.display = "block";
+                console.error("Fetch error:", error);
+            }
+        }
+
+        // Fetch and display completed rides
+        async function fetchCompletedRides() {
+            const driverTableBody = document.getElementById("driver-count-table-body");
+            const passengerTableBody = document.getElementById("passenger-count-table-body");
+            const zipcodeTableBody = document.getElementById("zipcode-count-table-body");
+            const completedRidesTableBody = document.getElementById("completed-rides-table-body");
+            const errorDiv = document.getElementById("analyst-error");
+            const loadingDiv = document.getElementById("analyst-loading");
+
+            driverTableBody.innerHTML = "";
+            passengerTableBody.innerHTML = "";
+            zipcodeTableBody.innerHTML = "";
+            completedRidesTableBody.innerHTML = "";
+            errorDiv.style.display = "none";
+            loadingDiv.style.display = "block";
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/completed_rides`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log("Completed Rides Data:", data); // Debugging log
+                loadingDiv.style.display = "none";
+
+                if (data.records && Array.isArray(data.records) && data.records.length > 0) {
+                    // Process data for driver ride counts
+                    const driverCounts = {};
+                    data.records.forEach(record => {
+                        if (record.fields && record.fields.driverid) {
+                            const driverId = record.fields.driverid;
+                            driverCounts[driverId] = (driverCounts[driverId] || 0) + 1;
+                        }
+                    });
+                    const sortedDriverCounts = Object.entries(driverCounts)
+                        .map(([driverId, count]) => ({ driverId, count }))
+                        .sort((a, b) => b.count - a.count);
+                    sortedDriverCounts.forEach(({ driverId, count }) => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${driverId}</td>
+                            <td>${count}</td>
+                        `;
+                        driverTableBody.appendChild(row);
+                    });
+
+                    // Process data for passenger ride counts
+                    const passengerCounts = {};
+                    data.records.forEach(record => {
+                        if (record.fields && record.fields.passengerid) {
+                            const passengerId = record.fields.passengerid;
+                            passengerCounts[passengerId] = (passengerCounts[passengerId] || 0) + 1;
+                        }
+                    });
+                    const sortedPassengerCounts = Object.entries(passengerCounts)
+                        .map(([passengerId, count]) => ({ passengerId, count }))
+                        .sort((a, b) => b.count - a.count);
+                    sortedPassengerCounts.forEach(({ passengerId, count }) => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${passengerId}</td>
+                            <td>${count}</td>
+                        `;
+                        passengerTableBody.appendChild(row);
+                    });
+
+                    // Process data for zipcode ride counts
+                    const zipcodeCounts = {};
+                    data.records.forEach(record => {
+                        if (record.fields && record.fields.zipcode) {
+                            const zipcode = record.fields.zipcode;
+                            zipcodeCounts[zipcode] = (zipcodeCounts[zipcode] || 0) + 1;
+                        }
+                    });
+                    const sortedZipcodeCounts = Object.entries(zipcodeCounts)
+                        .map(([zipcode, count]) => ({ zipcode, count }))
+                        .sort((a, b) => b.count - a.count);
+                    sortedZipcodeCounts.forEach(({ zipcode, count }) => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${zipcode}</td>
+                            <td>${count}</td>
+                        `;
+                        zipcodeTableBody.appendChild(row);
+                    });
+
+                    // Process data for complete ride details
+                    data.records.forEach(record => {
+                        if (!record.fields) {
+                            console.error("Missing fields in record:", record);
+                            return;
+                        }
+                        const fields = record.fields;
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${fields.rideid || 'N/A'}</td>
+                            <td>${fields.driverid || 'N/A'}</td>
+                            <td>${fields.passengerid || 'N/A'}</td>
+                            <td>${fields.startaddress || 'N/A'}</td>
+                            <td>${fields.endaddress || 'N/A'}</td>
+                            <td>${fields.ridestarttime ? new Date(fields.ridestarttime).toLocaleString() : 'N/A'}</td>
+                            <td>${fields.rideendtime ? new Date(fields.rideendtime).toLocaleString() : 'N/A'}</td>
+                            <td>${fields.drivephone || 'N/A'}</td>
+                            <td>${fields.passengerphone || 'N/A'}</td>
+                            <td>${fields.country || 'N/A'}</td>
+                            <td>${fields.state || 'N/A'}</td>
+                            <td>${fields.zipcode || 'N/A'}</td>
+                            <td>${fields.active !== undefined ? fields.active : 'N/A'}</td>
+                            <td>${fields.flagged !== undefined ? fields.flagged : 'N/A'}</td>
+                            <td>${fields.skyflow_id || 'N/A'}</td>
+                        `;
+                        completedRidesTableBody.appendChild(row);
+                    });
+                } else {
+                    errorDiv.textContent = "No completed rides found.";
+                    errorDiv.style.display = "block";
+                }
+            } catch (error) {
+                loadingDiv.style.display = "none";
+                errorDiv.textContent = `Error fetching data: ${error.message}`;
+                errorDiv.style.display = "block";
+                console.error("Fetch error:", error);
+            }
+        }
+
+        // Clear details when ride ID changes
+        function clearDetails() {
+            const detailsDiv = document.getElementById("details");
+            detailsDiv.innerHTML = "";
+        }
+
+        // Fetch driver details
+        async function fetchDriverDetails() {
+            const rideId = document.getElementById("ride-id").value;
+            const detailsDiv = document.getElementById("details");
+            const errorDiv = document.getElementById("error");
+            const loadingDiv = document.getElementById("loading");
+
+            if (!rideId) {
+                errorDiv.textContent = "Please select a Ride ID.";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            errorDiv.style.display = "none";
+            loadingDiv.style.display = "block";
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/flagged_driver_passenger_details?rideid=${rideId}&type=driver`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                loadingDiv.style.display = "none";
+
+                detailsDiv.innerHTML = `
+                    <h3>Driver Details for Ride ID: ${rideId}</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                loadingDiv.style.display = "none";
+                errorDiv.textContent = `Error fetching driver details: ${error.message}`;
+                errorDiv.style.display = "block";
+                console.error("Fetch error:", error);
+            }
+        }
+
+        // Fetch passenger details
+        async function fetchPassengerDetails() {
+            const rideId = document.getElementById("ride-id").value;
+            const detailsDiv = document.getElementById("details");
+            const errorDiv = document.getElementById("error");
+            const loadingDiv = document.getElementById("loading");
+
+            if (!rideId) {
+                errorDiv.textContent = "Please select a Ride ID.";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            errorDiv.style.display = "none";
+            loadingDiv.style.display = "block";
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/flagged_driver_passenger_details?rideid=${rideId}&type=passenger`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                loadingDiv.style.display = "none";
+
+                detailsDiv.innerHTML = `
+                    <h3>Passenger Details for Ride ID: ${rideId}</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                loadingDiv.style.display = "none";
+                errorDiv.textContent = `Error fetching passenger details: ${error.message}`;
+                errorDiv.style.display = "block";
+                console.error("Fetch error:", error);
+            }
+        }
+
+        // Fetch data on page load
+        window.onload = function() {
+            fetchFlaggedRides();
+            fetchCompletedRides();
+        };
+    </script>
+</body>
+</html>

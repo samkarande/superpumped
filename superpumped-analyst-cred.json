@@ -1,0 +1,15 @@
+{
+    "clientID":"q7adb898fef148fb9dafd61998096cb9",
+    "clientName":"US-Analyst",
+    "tokenURI":"https://manage.skyflowapis.com/v1/auth/sa/oauth/token",
+    "keyID":"e524094700f74322821dba14b25e6ab8",
+    "privateKey":"-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDAyeLGJP0lbhl2\ncmnvxY2G4HcMIaMU1szNf6vtdsODCb3uy0L+MKwpPCpQ8+Q+tv9ARzgk0CDzz4gm\n0YlBk5Px21KeyF0v7nzCYUxUwt6A4+kRMq82NSvzuEX8mgcPYmJDlX0JaEgj59ee\nwR+xscBbZ4X0f/vBW9CbvWCEVkwrM0Yk/8NVY2kRrhdsWBoITrimRH9pjnlJN+Xn\nkfYpK6+QBkqPudccVcGE18zm2K/BAADOP5wUf38Jrc/AL7T9rz2uOZ6LK3bYf1NJ\nDePlXATeLMeWlve1wKebiMnVr2oDeoO2R3Uh+7nXBCgEXKe2DkEOI+tQOH+h4bJ6\nVuIesPbHAgMBAAECggEBAIeU88E5/jY2qf2dFVek7ZVvgwmrFk/viHT1VupX3cPo\nNAUeOe0eOdV+FJx+CYT5maWQ8LEjFimhSDVUo1zU9vTes8orSy4MYP0rBE2QBn9K\nyXxo0sQivNhYPhAaGuD85fJ1zUuyZRmrUP66/xku0wL1WUXMRDeF5L3Cf4BSWJr/\n6FMYlM2bi89dIQlzU22Ydk8kJ1yBzI4h6hyEc5WIpuz1WH8nHmTMmUBAKRI/3q7H\n1evdNdk9r+2K4zBUax3VH0Km6l0BazU9euNKdKl6l85jxgYT7UDmIahv4cxyHv9K\nd1voCQkR5LTNdFfchFIEcNo0DxYBovpkyf21PF4iBeECgYEA9TJRdCxY3EmyLEmn\nRkg+tG+An18oAhJBSHMM0i8ulChFnmhUGbFJ8qgCjchLqft2mBhIEK7GsaRynehK\nMKPBf2X11xgqbA8JqMsknctcmSbs7yYA4n7zUwptjuvh9yZkC+PbdfettRLMeZwC\nvPY/UdI8yiTOBjOhZ4C0TBjKsakCgYEAyUhvXi2gjc8qihvhC44kAz0SgseH0be4\nv9WNK+tYm1uCY5bPB9umRjW0s6tnahc3VYRCpuwVjbD6F/m8X5ow8eIp6ZNak7s5\nvrSUrmx5Dcwi1p5o8NnH/rzjaFiXDW7v1ukNu/OUATJcABf8cocmVTsCU96NAX1n\nmrubwPYwiu8CgYEAp23PnwN1Ph74kjNNDLniT3VgH/NrL1blyyH8nD1pkfOZ7lwR\nKWYdN5wv+j7OI+k5Bwx1kSa3OLAxL9BhcKsxQtwNre2rchQmpWLpwvINberdmUOb\nEQ5c+tRBEXnS1+AYKuJRhlE1BVMr2tKEMCH6BNYJeoL9R9DTowiIlPnM1tkCgYAf\n549fijPsxm2jvo+JWVpz+PY6LI5mu4xZO+xIjeFZnsOoLXtbb4GHl3OxFvYpZsyq\njXBTLRCtiOPbcQZe0P35GTQzhdvRltesVstKan81pKnRAwL3Sk3dHuuc2o323yK9\nGevHYvCO0ACtMyActzdoQxY3XQtUtR/68snZaCyBmQKBgQDUVyD/oXp8A0Axf26q\nnHSx2beYMSeig+T9OqT313gNEJ/0s0UR8Pv/OcSAIm+FBQYCNgntQd6ZnoPY3GQ3\n0Oi+yNbKwt75NRDviFviHjCVTOY2sYaj7B6bKy37Ad+q43sJDTezt0Djs1K3KV1J\nSR2rxNrJIATvearC1hFx8YtJUw==\n-----END PRIVATE KEY-----\n",
+    "keyValidAfterTime":"2025-06-07T19:34:47.000Z",
+    "keyValidBeforeTime":"2026-06-07T19:34:47.000Z",
+    "keyAlgorithm":"KEY_ALG_RSA_2048",
+
+    "workspace_id": "yf3e75b02a2f43189ed185a4d2424b88",
+    "account_id": "o314e43ab2d74f1da93354ccef6c0bda",
+    "vaultURL": "https://ebfc9bee4242.vault.skyflowapis.com",
+    "vaultID": "o0ec618918544fea843e5975bd516e8d"
+}

@@ -4,6 +4,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 
 # pip install uvicorn
 # uvicorn main:app --reload
@@ -12,6 +13,13 @@ from sp_queryservice import sp_ext_service_get_completed_rides, sp_ext_service_g
 
 app = FastAPI(title="SuperPumped API", version="1.0")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Adjust to specific origins in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # Mount the static directory to serve static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -34,7 +42,8 @@ async def get_flagged_rides():
         print("================================")
         flagged_rides = sp_ext_service_get_flagged_rides("support")
         print(json.dumps(flagged_rides, indent=2))
-        return json.dumps(flagged_rides, indent=2)
+        #return json.dumps(flagged_rides, indent=2)
+        return flagged_rides
         
     except Exception as e:
         print(f"Error: {e}")
@@ -63,8 +72,9 @@ async def get_completed_rides():
         print("Role US Analyst - Completed Rides")
         print("================================")
         completed_rides = sp_ext_service_get_completed_rides("analyst")
-        #print(json.dumps(completed_rides, indent=2))
-        return json.dumps(completed_rides, indent=2)
+        print(json.dumps(completed_rides, indent=2))
+        #return json.dumps(completed_rides, indent=2)
+        return completed_rides
         
     except Exception as e:
         print(f"Error: {e}")

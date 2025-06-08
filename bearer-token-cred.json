@@ -1,0 +1,10 @@
+{
+    "clientID":"u55cc9619af24c52a1e0ff5f649dbab7",
+    "clientName":"Authenticate",
+    "tokenURI":"https://manage.skyflowapis.com/v1/auth/sa/oauth/token",
+    "keyID":"e575a3728ce94854ab1835e2f473b255",
+    "privateKey":"-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDGnRSRjNdOtJlQ\nUnQ36eIHcRySvx/LZyT8XyA0OFKeDSmPiWvbe08Te3opkZml2hBvNvTonHYLP/TL\naPhpqCdh9l8BXpYw3w5BXAIkhUoXB/VnylgXK/dDYpEEn5X6dmkDosTb2m/8Rdpj\nju1CoOAOvelk1t1NKyWFHiaLWX6n4ByWmv5cV7Qt/1SrMmu04xfqzjoqUU5JHKrc\nFp6Eb8ZmVhoFzx0hId0FAPY+6oAsGH+soa/0w31NpniG61TA80Q9DpqVLdugSaef\neXX4U9S0t9ycbKvsl6kKlAMwik7U82Op41NNcdfqr6kKRSFGKrQj6jbwcBzk1rfE\nZHU/EhqNAgMBAAECggEAJmZydp2zdy0lw0jd3X2jzOqKqri3Lf14Qi8mK9KD7rj+\nwxi/uMTDijHCcc0L1uwtZ0NJ4Lt3ez9XVgiqlssDKkaXIc2m3jYSLILcizEWHRPV\n18Zgd8JxYR7qiOlN9wnzzdcnlpZKNo1O5xbYOpyeFVuUh4Gfce8Ypv8oVqLsAQrV\napBVQqNQWXmbnrX36UcPetqSKoufjl2dwDlwff+AmdqLDeeurLcQ0TYw6LfmDGtu\nKe/QAgu9TTBfX+k2At0MyPzaaJfLs/eQqVfLu1b+zI9wO8GMQq7qX1FgsdFEu1Eo\npOflT4OZoZ+IP3nvvq4bfYCIpos06XQa4WbIc5MDpQKBgQDhS0wCJfvUoMnsEkix\n+Ae2hSKpgK0+wdViRcgkA1m49XB/gMYMQPyxErLiXoRzAU/OdSwMHZNUtbcwm50M\ndZHEaHLZZmaW0y7HHeENo1yqC5YiF3n5vauFTWI87xWGG45wH6zEG+UWZqa91ZmQ\nynDNx/Nj9LcmjWgQVTAUwTDdrwKBgQDhruCD8NjK3gtNZZV77g2m5jmJFX30X//H\n1S0l9qatln4u4s5C/iHy00Wmec7+ZFBttX166THUFU4BGYo/kKM6kl46AvPfUr8Z\ndkrS++nZgwCzKUnk/Z8+V60jMDkm8SiVbh6DPrRFcNu50/Ole4wdcTKagzslKQEF\nwTzyO752gwKBgQCLavlCaxcIYegS+s2ZtI+xV3o3wrVzHKhcBCryflBLsTdI7/uf\nIag+PAAPLcZxFOK6NLBpXvQJe9o9bk8loqvuC2TnPANIWq+b8NWQhwOVB06FElod\nPk6iU1zzsFB1iSAAKtnTEiAWWLfeygwaGezsq0vnE00zwlYfpVf3wAXpaQKBgQCC\nRleV8kbCvHBbyiMDOgSpbkaSKlTd5ziYWydHvdyzYacPW59jLp3cNTcEhVYGpVOE\nMPrxI4G/AllX6y1RyiVfXzSDWkb6iCKGCTHiHsb751JVGaVtSTZOX4AzStgC8bzS\nnZGBg4W+fApqd74yrWHRcRGb/dr7dXMApm6PCgvFDwKBgQDB1tZuGQ9MoGPwNZ31\nMWGMX4we/LDLGsWK3rx0beXrZKR5N2Olji7Swsm1pG+chaB222/cMxom5mVP3N4N\n+M/sA4I3H1qC8zKI2r3EZmie/B09SHr/YiiutdYSdqcyotNJ9QhdBiE07KULDKiF\nPZHgFSZpjejgttQA3HiB16W0fg==\n-----END PRIVATE KEY-----\n",
+    "keyValidAfterTime":"2025-06-02T00:05:35.000Z",
+    "keyValidBeforeTime":"2026-06-02T00:05:35.000Z",
+    "keyAlgorithm":"KEY_ALG_RSA_2048"
+}
