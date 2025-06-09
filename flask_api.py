@@ -54,7 +54,7 @@ async def get_flagged_rides():
 async def get_flagged_rides_in():
     #curl -X GET "http://localhost:8000/api/flagged_rides"
     try:
-        print("Role US Support - Flagged Rides")
+        print("Role IN Support - Flagged Rides")
         print("================================")
         flagged_rides = sp_ext_service_get_flagged_rides("in-support")
         print(json.dumps(flagged_rides, indent=2))
@@ -85,7 +85,7 @@ async def get_flagged_driver_passenger_details():
 @app.get("/api/flagged_driver_passenger_details_in")
 async def get_flagged_driver_passenger_details_in():
     try:
-        print("Role US Support - Flagged Driver and Passenger Details")
+        print("Role IN Support - Flagged Driver and Passenger Details")
         print("================================")
         flagged_details =""#= sp_ext_service_get_flagged_rides("in-support")
         #print(json.dumps(flagged_details, indent=2))
@@ -116,7 +116,7 @@ async def get_completed_rides():
 @app.get("/api/completed_rides_in")
 async def get_completed_rides_in():
     try:
-        print("Role US Analyst - Completed Rides")
+        print("Role IN Analyst - Completed Rides")
         print("================================")
         completed_rides = sp_ext_service_get_completed_rides("in-analyst")
         print(json.dumps(completed_rides, indent=2))

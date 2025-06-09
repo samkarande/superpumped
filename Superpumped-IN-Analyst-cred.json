@@ -9,10 +9,8 @@
     "keyAlgorithm":"KEY_ALG_RSA_2048",
 
     "VAULT_NAME":"Superpumped-IN",
-    "VAULT_DESCRIPTION": "",
-    "WORKSPACE_ID":"yf3e75b02a2f43189ed185a4d2424b88",
-    "ACCOUNT_ID":"o314e43ab2d74f1da93354ccef6c0bda",
-    "VAULT_URL":"https://ebfc9bee4242.vault.skyflowapis.com",
-    "VAULT_ID":"c323aef5487c4e5ca482e865a430d2e3"
-
+    "workspace_id":"yf3e75b02a2f43189ed185a4d2424b88",
+    "account_id":"o314e43ab2d74f1da93354ccef6c0bda",
+    "vaultURL":"https://ebfc9bee4242.vault.skyflowapis.com",
+    "vaultID":"c323aef5487c4e5ca482e865a430d2e3"
 }
