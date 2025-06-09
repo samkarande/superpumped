@@ -1,0 +1,18 @@
+{
+    "clientID":"k9530820d4c44d0aa2b22c92ba278ce6",
+    "clientName":"IN-Analyst",
+    "tokenURI":"https://manage.skyflowapis.com/v1/auth/sa/oauth/token",
+    "keyID":"u55e2a399e7f4c50910c3a0eeefe80f1",
+    "privateKey":"-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDt9SS9eDwSkqH5\nkW2Py34m14olmoyi6rbVs8uHZne2hE9X/JbFPuuM3dWzUxo7GYDBgZvVqtEv+Siy\ni/jm8S64vaHuCKwlJBxFRO3u69OoioQEQ9fj75RodyDiHIrsEbuvtmK8iwM2tTzS\ngJ1XyR8CTvmZ/xFHOugr6sZP263+hLI1xKuuo9wLiAq9cmF7XBjmVqlKOwZSQmc2\nv4vOlwW61/BqvV7ZNMWKpOwmgswhdII0x5ZX8KP21VER4FJu0NRn6/exzjfdbFPV\nFk4/EXAG4LNKEM7AwmnwHL6VyIcaPfwOkwEHg3//r+4L09ARqoziookraTn/pQXc\nMxoynNKTAgMBAAECggEAB134ljkbuwN5Kk3bU4FcVX2E1Gc1hXG42WLooTeF60ur\nXTD/xfmNt13C2Ptwq3W9q8AEgBf6w/51yRlWSmgbJzMPyVvRYJD+oxJgP25jrisj\nrTIgg/kN4jIV/YoervJZmjYOVoIDRnVT/bxnoqkiYaLqTV89PLRRLdLl8uD9QQzx\nYxsi/jo3Wh8PTaFwV2nRHAqAWCbkNnLyfAsyW6LIhAULwPkukvW69hsrdiflOwpz\nxz/KXD8zEN4vjF+gDajR06MuVc8q6lwJC0QtY6UMDqb0teOgA32CDHFV0quUNYuB\nDbHJEZ/s1KQ+t6RPgqsotR2SZ376YA3CdKRD34/GaQKBgQD2E7pC1Mu13oBfW7FB\n9DlgxZIK10+LFKviummV+NHMj4sOncQkxh1mitDtEeT0VoKKbGMlUvlK8AiXqP3s\ntlToeJ2UKROpV7u9LPADXW1L2jebopHFuMNuxNw6MSCus78z4poYrmqicihQOnAM\nVeLcOnL8F9UYS5q9Z+wPHSzNnQKBgQD3jZkYj4DkZgHP4lrNaNWwcxSP+6iw8j51\nePgqN4jlCctVXtW0MJOotBv32QTgIMf51tSHubKr6X8TrV+BMJ1Lo/s+8iTTuSxv\n4mmVuRXbyl88pEy0m81T/80JoOoZnWpkmSFP4d3i6BxThIxfTe1eG1gcxrFLFUz2\nhNdRQaRB7wKBgAXlHxcuxdqLhAPEzJBJ6333/bGoys0IJ738vT7MgSonXitxeBtx\na47jUHH9dcCsud/bDNz+Cd7TtUD82WhsTchr60p7WW87HNJBW1aZTF7+0Uo3MMrN\nzFDBAo2aU7Abuj7h9NMWipNtrK2PWNPS0uZ3t/12DLLSTNiwvqT2C/a5AoGAUYOi\nwd+fBZZBSn6yf6jhlHSQdMjdR0a9Illu/hfDUAflmHrdy7OjK44DF52yaUriDnab\nDQYsu0brvUL9i8DCSsH4XUXGsqDq7PyU3+ROOk1tBr7jMyWKevpkPaNq8nxPKEj0\nGyW4tprPmQCwaEF0w+QlI3SZtKuS6Cnd7Le8qqkCgYAHtucSTzQ7Ld2XQac+m9Nb\nQQ9wdhxuCBxQEkQ00ZjrOuz+FwUzRjMIyAWKds9Nm6T2sJa0x2Xjjd2VY+aLqTjI\ngFKkV/pxYoFAxnGhKyMxZNMW4+rtZVBVryOKGdi/EUBYo1AhRHqS1rSVn4DZnSLA\nJ0NE7JqttlOvasJiVjmd5Q==\n-----END PRIVATE KEY-----\n",
+    "keyValidAfterTime":"2025-06-09T15:18:54.000Z",
+    "keyValidBeforeTime":"2026-06-09T15:18:54.000Z",
+    "keyAlgorithm":"KEY_ALG_RSA_2048",
+
+    "VAULT_NAME":"Superpumped-IN",
+    "VAULT_DESCRIPTION": "",
+    "WORKSPACE_ID":"yf3e75b02a2f43189ed185a4d2424b88",
+    "ACCOUNT_ID":"o314e43ab2d74f1da93354ccef6c0bda",
+    "VAULT_URL":"https://ebfc9bee4242.vault.skyflowapis.com",
+    "VAULT_ID":"c323aef5487c4e5ca482e865a430d2e3"
+
+}
