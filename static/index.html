@@ -42,7 +42,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>US Support for Flagged Rides</title>
+    <title>Support for Flagged Rides</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -117,13 +117,13 @@
         }
     </style>
 </head>
-<body>
+<body onload="refreshData('overview')">
     <div class="tabs">
-        <button class="tablinks" onclick="openTab(event, 'Tab1')">Overview</button>
-        <button class="tablinks" onclick="openTab(event, 'Tab2')">US Ride Support</button>
-        <button class="tablinks" onclick="openTab(event, 'Tab3')">US Analyst</button>
-        <button class="tablinks" onclick="openTab(event, 'Tab4')">IN Ride Support</button>
-        <button class="tablinks" onclick="openTab(event, 'Tab5')">IN Analyst</button>
+        <button class="tablinks" onclick="openTab(event, 'Tab1', 'overview')">Overview</button>
+        <button class="tablinks" onclick="openTab(event, 'Tab2', 'flagged_rides')">US Ride Support</button>
+        <button class="tablinks" onclick="openTab(event, 'Tab3', 'completed_rides')">US Analyst</button>
+        <button class="tablinks" onclick="openTab(event, 'Tab4', 'flagged_rides_in')">IN Ride Support</button>
+        <button class="tablinks" onclick="openTab(event, 'Tab5', 'completed_rides_in')">IN Analyst</button>
     </div>
 
     <div id="Tab1" class="tabcontent">
@@ -188,7 +188,7 @@
             <p>ALLOW READ ON driver.* WITH REDACTION=DEFAULT WHERE driver.country='US'</p>
             <p>ALLOW READ ON passenger.* WITH REDACTION=DEFAULT WHERE passenger.country='US'</p>
         </div>
-        <button onclick="refreshData('analyst')">Refresh Data</button>
+        <button onclick="refreshData('completed_rides')">Refresh Data</button>
         <div id="loadingAnalyst">Loading...</div>
         <h4>Driver Ride Counts</h4>
         <table id="driverRideCounts">
@@ -297,7 +297,7 @@
             <p>ALLOW READ ON driver.* WITH REDACTION=DEFAULT WHERE driver.country='IN'</p>
             <p>ALLOW READ ON passenger.* WITH REDACTION=DEFAULT WHERE passenger.country='IN'</p>
         </div>
-        <button onclick="refreshData('analyst_in')">Refresh Data</button>
+        <button onclick="refreshData('completed_rides_in')">Refresh Data</button>
         <div id="loadingAnalystIN">Loading...</div>
         <h4>Driver Ride Counts</h4>
         <table id="driverRideCountsIN">
@@ -355,7 +355,7 @@
     </div>
 
     <script>
-        function openTab(evt, tabName) {
+        function openTab(evt, tabName, apiType) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tabcontent");
             for (i = 0; i < tabcontent.length; i++) {
@@ -367,14 +367,134 @@
             }
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
+            if (apiType !== 'overview') {
+                refreshData(apiType);
+            }
         }
 
         function refreshData(type) {
             const apiUrl = type === 'flagged_rides' ? '/api/flagged_rides' :
                            type === 'flagged_rides_in' ? '/api/flagged_rides_in' :
-                           type === 'analyst' ? '/api/analyst_data' : '/api/analyst_data_in';
-            // Placeholder for API call
-            console.log(`Fetching data from ${apiUrl}`);
+                           type === 'completed_rides' ? '/api/completed_rides' :
+                           type === 'completed_rides_in' ? '/api/completed_rides_in' :
+                           '';
+            if (!apiUrl) return;
+
+            // Hide loading indicator after data is processed
+            const loadingElement = document.getElementById(type === 'flagged_rides' ? 'loading' :
+                                                          type === 'flagged_rides_in' ? 'loadingIN' :
+                                                          type === 'completed_rides' ? 'loadingAnalyst' :
+                                                          'loadingAnalystIN');
+            loadingElement.style.display = 'block';
+
+            // Mock API call (replace with actual fetch in production)
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (type === 'flagged_rides' || type === 'flagged_rides_in') {
+                        // Process flagged rides data for Tabs 2 and 4
+                        const tableBody = document.getElementById(type === 'flagged_rides' ? 'flaggedRidesTable' : 'flaggedRidesTableIN').getElementsByTagName('tbody')[0];
+                        const selectElement = document.getElementById(type === 'flagged_rides' ? 'rideSelect' : 'rideSelectIN');
+                        tableBody.innerHTML = '';
+                        selectElement.innerHTML = '<option>Select a Ride ID</option>';
+
+                        data.records.forEach(record => {
+                            const fields = record.fields;
+                            const row = tableBody.insertRow();
+                            row.insertCell().textContent = fields.rideid;
+                            row.insertCell().textContent = fields.driverid;
+                            row.insertCell().textContent = fields.passengerid;
+                            row.insertCell().textContent = fields.startaddress;
+                            row.insertCell().textContent = fields.endaddress;
+                            row.insertCell().textContent = fields.ridestarttime;
+                            row.insertCell().textContent = fields.rideendtime;
+                            row.insertCell().textContent = fields.drivephone;
+                            row.insertCell().textContent = fields.passengerphone;
+                            row.insertCell().textContent = fields.country;
+                            row.insertCell().textContent = fields.state;
+                            row.insertCell().textContent = fields.zipcode;
+                            row.insertCell().textContent = fields.active;
+                            row.insertCell().textContent = fields.flagged;
+                            row.insertCell().textContent = fields.skyflow_id;
+
+                            const option = document.createElement('option');
+                            option.value = fields.rideid;
+                            option.textContent = fields.rideid;
+                            selectElement.appendChild(option);
+                        });
+                    } else if (type === 'completed_rides' || type === 'completed_rides_in') {
+                        // Process completed rides data for Tabs 3 and 5
+                        const tableBody = document.getElementById(type === 'completed_rides' ? 'completedRidesTable' : 'completedRidesTableIN').getElementsByTagName('tbody')[0];
+                        const driverCountsBody = document.getElementById(type === 'completed_rides' ? 'driverRideCounts' : 'driverRideCountsIN').getElementsByTagName('tbody')[0];
+                        const passengerCountsBody = document.getElementById(type === 'completed_rides' ? 'passengerRideCounts' : 'passengerRideCountsIN').getElementsByTagName('tbody')[0];
+                        const zipcodeCountsBody = document.getElementById(type === 'completed_rides' ? 'zipcodeRideCounts' : 'zipcodeRideCountsIN').getElementsByTagName('tbody')[0];
+                        tableBody.innerHTML = '';
+                        driverCountsBody.innerHTML = '';
+                        passengerCountsBody.innerHTML = '';
+                        zipcodeCountsBody.innerHTML = '';
+
+                        // Aggregate counts
+                        const driverCounts = {};
+                        const passengerCounts = {};
+                        const zipcodeCounts = {};
+
+                        data.records.forEach(record => {
+                            const fields = record.fields;
+
+                            // Populate completed rides table
+                            const row = tableBody.insertRow();
+                            row.insertCell().textContent = fields.rideid;
+                            row.insertCell().textContent = fields.driverid;
+                            row.insertCell().textContent = fields.passengerid;
+                            row.insertCell().textContent = fields.startaddress;
+                            row.insertCell().textContent = fields.endaddress;
+                            row.insertCell().textContent = fields.ridestarttime;
+                            row.insertCell().textContent = fields.rideendtime;
+                            row.insertCell().textContent = fields.drivephone;
+                            row.insertCell().textContent = fields.passengerphone;
+                            row.insertCell().textContent = fields.country;
+                            row.insertCell().textContent = fields.state;
+                            row.insertCell().textContent = fields.zipcode;
+                            row.insertCell().textContent = fields.active;
+                            row.insertCell().textContent = fields.flagged;
+                            row.insertCell().textContent = fields.skyflow_id;
+
+                            // Aggregate driver counts
+                            driverCounts[fields.driverid] = (driverCounts[fields.driverid] || 0) + 1;
+                            // Aggregate passenger counts
+                            passengerCounts[fields.passengerid] = (passengerCounts[fields.passengerid] || 0) + 1;
+                            // Aggregate zipcode counts
+                            zipcodeCounts[fields.zipcode] = (zipcodeCounts[fields.zipcode] || 0) + 1;
+                        });
+
+                        // Populate driver counts table
+                        Object.keys(driverCounts).forEach(driverId => {
+                            const row = driverCountsBody.insertRow();
+                            row.insertCell().textContent = driverId;
+                            row.insertCell().textContent = driverCounts[driverId];
+                        });
+
+                        // Populate passenger counts table
+                        Object.keys(passengerCounts).forEach(passengerId => {
+                            const row = passengerCountsBody.insertRow();
+                            row.insertCell().textContent = passengerId;
+                            row.insertCell().textContent = passengerCounts[passengerId];
+                        });
+
+                        // Populate zipcode counts table
+                        Object.keys(zipcodeCounts).forEach(zipcode => {
+                            const row = zipcodeCountsBody.insertRow();
+                            row.insertCell().textContent = zipcode;
+                            row.insertCell().textContent = zipcodeCounts[zipcode];
+                        });
+                    }
+
+                    loadingElement.style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    loadingElement.style.display = 'none';
+                });
         }
 
         function getDetails(type) {
@@ -389,7 +509,7 @@
             console.log(`Fetching ${type} details from ${apiUrl}`);
         }
 
-        // Open default tab
+        // Open default tab on page load
         document.getElementsByClassName("tablinks")[0].click();
     </script>
 </body>
