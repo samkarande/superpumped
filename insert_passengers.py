@@ -37,21 +37,27 @@ def insert_passenger_record(record, credentials_path, vault_id, vault_url):
 
 def main():
     try:
-        # Configuration
-        credentials_path = "bearer-token-cred.json"  # Path to your Skyflow credentials file
-        vault_id = "o0ec618918544fea843e5975bd516e8d"
+ # Configuration
+        ## Superpumped US vault
+        #credentials_path = "bearer-token-cred.json"  # Path to your Skyflow credentials file
+        #vault_id = "o0ec618918544fea843e5975bd516e8d"
+        #vault_url = "https://ebfc9bee4242.vault.skyflowapis.com"
+
+        ## Superpumped IN vault
+        credentials_path = "in-bearer-token-cred.json"  # Path to your Skyflow credentials file
+        vault_id = "c323aef5487c4e5ca482e865a430d2e3"
         vault_url = "https://ebfc9bee4242.vault.skyflowapis.com"
 
         # Example record to insert (matches the schema from the cURL)
         record = {
-            "passengerid": 1010,
-            "fname": "Soo-jin",
-            "lname": "Park",
-            "state" : "CA",
-            "country": "US",
-            "phone": "+14088294532",
-            "email": "park@gmail.com",
-            "address": "29 oark st, san hose, CA 94010"
+            "passengerid": 2010,
+            "fname": "Shantanu",
+            "lname": "Dutt",
+            "state" : "MH",
+            "country": "IN",
+            "phone": "+919108292010",
+            "email": "bikram@bedi.com",
+            "address": "210 juhu tara, Mumbai"
         }
 
         # Insert the record

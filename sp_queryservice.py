@@ -16,6 +16,12 @@ def sp_getCredentials_path(user):
         credentials_path = "superpumped-support-role-credentials-context.json"
     elif (user == "analyst"):
         credentials_path = "superpumped-analyst-cred.json"
+    elif( user == "in-support"):
+        credentials_path = "Superpumped-IN-Support-cred.json"
+    elif (user == "in-analyst"):
+        credentials_path = "Superpumped-IN-Analyst-cred.json"
+    elif (user == "in-bearer"):
+        credentials_path = "in-bearer-token-cred.json"
     else:
         credentials_path = "bearer-token-cred.json"
     

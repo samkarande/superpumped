@@ -19,17 +19,17 @@ def create_new_ride_records(count):
     #for i in range(count):
     ride = {
         "rideid": rideid_start,
-        "driverid": random.randint(100, 110),
-        "passengerid": random.randint(1000, 1010),
+        "driverid": random.randint(200, 210),
+        "passengerid": random.randint(2000, 2010),
         "ridestarttime": ridestarttime,
         "rideendtime": rideendtime,
         "active": random.choice([True, False]),
         "flagged": random.choice([True, False]),
-        "state": random.choice(["CA", "CA", "NY", "CA"]),
+        "state": random.choice(["KA", "MH", "KA", "MH"]),
         "startaddress": "123 summer St",
         "endaddress": "456 Oak Ave",
-        "zipcode": random.choice(["90210", "10001", "87020", "64738"]),
-        "country": "US",
+        "zipcode": random.choice(["400001", "400002", "560100", "560050"]),
+        "country": "IN",
         "drivephone": str(random.randint(3000000000, 9000000000)),
         "passengerphone": str(random.randint(3000000000, 9000000000))
     }
@@ -70,9 +70,14 @@ def insert_ride_record(record, credentials_path, vault_id, vault_url):
 
 def main():
     try:
-        # Configuration
-        credentials_path = "bearer-token-cred.json"  # Path to your Skyflow credentials file
-        vault_id = "o0ec618918544fea843e5975bd516e8d"
+        ## Superpumped US vault
+        #credentials_path = "bearer-token-cred.json"  # Path to your Skyflow credentials file
+        #vault_id = "o0ec618918544fea843e5975bd516e8d"
+        #vault_url = "https://ebfc9bee4242.vault.skyflowapis.com"
+
+        ## Superpumped IN vault
+        credentials_path = "in-bearer-token-cred.json"  # Path to your Skyflow credentials file
+        vault_id = "c323aef5487c4e5ca482e865a430d2e3"
         vault_url = "https://ebfc9bee4242.vault.skyflowapis.com"
 
         # Example record to insert (matches the schema from the cURL)
@@ -94,7 +99,7 @@ def main():
         #}
 
         # Insert the record
-        for i in range(10):
+        for i in range(20):
 
             record = create_new_ride_records(1)
             #print(json.dumps(record, indent=2))

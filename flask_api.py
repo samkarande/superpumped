@@ -48,6 +48,22 @@ async def get_flagged_rides():
     except Exception as e:
         print(f"Error: {e}")
         return {"error": str(e)}
+    
+# GET Flagged Rides: Return rides that are flagged for support review
+@app.get("/api/flagged_rides_in")
+async def get_flagged_rides_in():
+    #curl -X GET "http://localhost:8000/api/flagged_rides"
+    try:
+        print("Role US Support - Flagged Rides")
+        print("================================")
+        flagged_rides = sp_ext_service_get_flagged_rides("in-support")
+        print(json.dumps(flagged_rides, indent=2))
+        #return json.dumps(flagged_rides, indent=2)
+        return flagged_rides
+        
+    except Exception as e:
+        print(f"Error: {e}")
+        return {"error": str(e)}
 
 #flagged_driver_passenger_details
 # curl -X GET "http://localhost:8000/api/flagged_driver_passenger_details"
@@ -64,6 +80,21 @@ async def get_flagged_driver_passenger_details():
         print(f"Error: {e}")
         return {"error": str(e)}
 
+#flagged_driver_passenger_details
+# curl -X GET "http://localhost:8000/api/flagged_driver_passenger_details_in"
+@app.get("/api/flagged_driver_passenger_details_in")
+async def get_flagged_driver_passenger_details_in():
+    try:
+        print("Role US Support - Flagged Driver and Passenger Details")
+        print("================================")
+        flagged_details =""#= sp_ext_service_get_flagged_rides("in-support")
+        #print(json.dumps(flagged_details, indent=2))
+        return json.dumps(flagged_details, indent=2)
+        
+    except Exception as e:
+        print(f"Error: {e}")
+        return {"error": str(e)}
+    
 # superpumped analyst API for completed rides
 # curl -X GET "http://localhost:8000/api/completed_rides"
 @app.get("/api/completed_rides")
@@ -72,6 +103,22 @@ async def get_completed_rides():
         print("Role US Analyst - Completed Rides")
         print("================================")
         completed_rides = sp_ext_service_get_completed_rides("analyst")
+        print(json.dumps(completed_rides, indent=2))
+        #return json.dumps(completed_rides, indent=2)
+        return completed_rides
+        
+    except Exception as e:
+        print(f"Error: {e}")
+        return {"error": str(e)}
+
+# superpumped analyst API for completed rides
+# curl -X GET "http://localhost:8000/api/completed_rides_in"
+@app.get("/api/completed_rides_in")
+async def get_completed_rides_in():
+    try:
+        print("Role US Analyst - Completed Rides")
+        print("================================")
+        completed_rides = sp_ext_service_get_completed_rides("in-analyst")
         print(json.dumps(completed_rides, indent=2))
         #return json.dumps(completed_rides, indent=2)
         return completed_rides
