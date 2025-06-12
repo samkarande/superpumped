@@ -356,80 +356,6 @@
 
     <script>
 
-        async function getPassengerDetails() {
-            const rideId = document.getElementById('rideIdSelect').value;
-            if (!rideId) {
-                alert('Please select a Ride ID');
-                return;
-            }
-
-            try {
-                const response = await fetch(`flagged_passenger_details?rideid=${rideId}`);
-                const data = await response.json();
-                
-                // Format JSON data for display
-                const formattedData = JSON.stringify(data, null, 2);
-                
-                // Create pop-up window
-                const popup = window.open('', 'Passenger Details', 'width=600,height=400');
-                popup.document.write(`
-                    <html>
-                        <head>
-                            <title>Passenger Details</title>
-                            <style>
-                                body { font-family: Arial, sans-serif; padding: 20px; }
-                                pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
-                            </style>
-                        </head>
-                        <body>
-                            <h2>Passenger Details</h2>
-                            <pre>${formattedData}</pre>
-                            <button onclick="window.close()">Close</button>
-                        </body>
-                    </html>
-                `);
-            } catch (error) {
-                alert('Error fetching passenger details: ' + error.message);
-            }
-        }
-
-        async function getDriverDetails() {
-            const rideId = document.getElementById('rideIdSelect').value;
-            if (!rideId) {
-                alert('Please select a Ride ID');
-                return;
-            }
-
-            try {
-                const response = await fetch(`flagged_driver_details?rideid=${rideId}`);
-                const data = await response.json();
-                
-                // Format JSON data for display
-                const formattedData = JSON.stringify(data, null, 2);
-                
-                // Create pop-up window
-                const popup = window.open('', 'Driver Details', 'width=600,height=400');
-                popup.document.write(`
-                    <html>
-                        <head>
-                            <title>Driver Details</title>
-                            <style>
-                                body { font-family: Arial, sans-serif; padding: 20px; }
-                                pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
-                            </style>
-                        </head>
-                        <body>
-                            <h2>Driver Details</h2>
-                            <pre>${formattedData}</pre>
-                            <button onclick="window.close()">Close</button>
-                        </body>
-                    </html>
-                `);
-            } catch (error) {
-                alert('Error fetching driver details: ' + error.message);
-            }
-        }
-        
         function openTab(evt, tabName, apiType) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tabcontent");
@@ -584,6 +510,87 @@
             console.log(`Fetching ${type} details from ${apiUrl}`);
         }
 
+        async function getPassengerDetails() {
+        
+            //const rideId = document.getElementById('rideIdSelect').value;
+            //if (!rideId) {
+            //    alert('Please select a Ride ID');
+            //    return;
+            //    rideId = "10001";
+            //}
+            const rideId = "10001";
+            //alert(rideId);
+            try {
+                
+                const response = await fetch(`api/flagged_passenger_details?rideid=${rideId}`);
+                const data = await response.json();
+                
+                // Format JSON data for display
+                const formattedData = JSON.stringify(data, null, 2);
+                alert(formattedData);    
+                // Create pop-up window
+                //const popup = window.open('', 'Passenger Details', 'width=600,height=400');
+                //popup.document.write(`
+                //    <html>
+                //        <head>
+                //            <title>Passenger Details</title>
+                //            <style>
+                //                body { font-family: Arial, sans-serif; padding: 20px; }
+                //                pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
+                //            </style>
+                //        </head>
+                //        <body>
+                //            <h2>Passenger Details</h2>
+                //            <pre>${formattedData}</pre>
+                //            <button onclick="window.close()">Close</button>
+                //        </body>
+                //    </html>
+                //`);
+            } catch (error) {
+                alert('Error fetching passenger details: ' + error.message);
+            }
+        }
+
+        async function getDriverDetails() {
+            //alert("Button clicked!");
+            //const rideId = document.getElementById('rideIdSelect').value;
+            //if (!rideId) {
+            //    alert('Please select a Ride ID');
+            //    return;
+                
+            //}
+            const rideId = "10001";
+            
+            try {
+                const response = await fetch(`api/flagged_driver_details?rideid=${rideId}`);
+                const data = await response.json();
+                
+                // Format JSON data for display
+                const formattedData = JSON.stringify(data, null, 2);
+                alert(formattedData);    
+                // Create pop-up window
+                //const popup = window.open('', 'Driver Details', 'width=600,height=400');
+                //popup.document.write(`
+                //    <html>
+                //        <head>
+                //            <title>Driver Details</title>
+                //            <style>
+                //                body { font-family: Arial, sans-serif; padding: 20px; }
+                //                pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
+                //            </style>
+                //        </head>
+                //        <body>
+                //            <h2>Driver Details</h2>
+                //            <pre>${formattedData}</pre>
+                //            <button onclick="window.close()">Close</button>
+                //        </body>
+                //    </html>
+                //`);
+            } catch (error) {
+                alert('Error fetching driver details: ' + error.message);
+            }
+        }
+        
         // Open default tab on page load
         document.getElementsByClassName("tablinks")[0].click();
     </script>
