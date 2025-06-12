@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # pip install uvicorn
 # uvicorn main:app --reload
 
-from sp_queryservice import sp_ext_service_get_completed_rides, sp_ext_service_get_flagged_rides
+from sp_queryservice import sp_ext_service_get_completed_rides, sp_ext_service_get_flagged_ride_driver_detail, sp_ext_service_get_flagged_ride_passenger_detail, sp_ext_service_get_flagged_rides
 
 app = FastAPI(title="SuperPumped API", version="1.0")
 
@@ -58,7 +58,6 @@ async def get_flagged_rides_in():
         print("================================")
         flagged_rides = sp_ext_service_get_flagged_rides("in-support")
         print(json.dumps(flagged_rides, indent=2))
-        #return json.dumps(flagged_rides, indent=2)
         return flagged_rides
         
     except Exception as e:
@@ -66,35 +65,66 @@ async def get_flagged_rides_in():
         return {"error": str(e)}
 
 #flagged_driver_passenger_details
-# curl -X GET "http://localhost:8000/api/flagged_driver_passenger_details"
-@app.get("/api/flagged_driver_passenger_details")
-async def get_flagged_driver_passenger_details():
+# curl -X GET "http://localhost:8000/api/flagged_driver_details"
+@app.get("/api/flagged_driver_details")
+async def get_flagged_driver_details(rideid : str):
     try:
         print("Role US Support - Flagged Driver and Passenger Details")
         print("================================")
-        flagged_details =""#= sp_ext_service_get_flagged_rides("support")
-        #print(json.dumps(flagged_details, indent=2))
-        return json.dumps(flagged_details, indent=2)
+        flagged_details = sp_ext_service_get_flagged_ride_driver_detail("US", rideid)
+        print(json.dumps(flagged_details, indent=2))
+        return flagged_details
         
     except Exception as e:
         print(f"Error: {e}")
         return {"error": str(e)}
 
-#flagged_driver_passenger_details
-# curl -X GET "http://localhost:8000/api/flagged_driver_passenger_details_in"
-@app.get("/api/flagged_driver_passenger_details_in")
-async def get_flagged_driver_passenger_details_in():
+#flagged_driver_details
+# curl -X GET "http://localhost:8000/api/flagged_driver_details_in"
+@app.get("/api/flagged_driver_details_in")
+async def get_flagged_driver_details_in(rideid : int):
     try:
         print("Role IN Support - Flagged Driver and Passenger Details")
         print("================================")
-        flagged_details =""#= sp_ext_service_get_flagged_rides("in-support")
-        #print(json.dumps(flagged_details, indent=2))
-        return json.dumps(flagged_details, indent=2)
+        flagged_details = sp_ext_service_get_flagged_ride_driver_detail("IN", rideid)
+        print(json.dumps(flagged_details, indent=2))
+        return flagged_details
         
     except Exception as e:
         print(f"Error: {e}")
         return {"error": str(e)}
-    
+
+
+#flagged_driver_passenger_details
+# curl -X GET "http://localhost:8000/api/flagged_passenger_details_in"
+@app.get("/api/flagged_passenger_details")
+async def get_flagged_passenger_details(rideid : str):
+    try:
+        print("Role US Support - Flagged Driver and Passenger Details")
+        print("================================")
+        flagged_details = sp_ext_service_get_flagged_ride_passenger_detail("US", rideid)
+        print(json.dumps(flagged_details, indent=2))
+        return flagged_details
+        
+    except Exception as e:
+        print(f"Error: {e}")
+        return {"error": str(e)}
+
+#flagged_driver_details
+# curl -X GET "http://localhost:8000/api/flagged_passenger_details_in"
+@app.get("/api/flagged_passenger_details_in")
+async def get_flagged_passenger_details_in(rideid : str):
+    try:
+        print("Role IN Support - Flagged Driver and Passenger Details")
+        print("================================")
+        flagged_details = sp_ext_service_get_flagged_ride_passenger_detail("IN", rideid)
+        print(json.dumps(flagged_details, indent=2))
+        return flagged_details
+        
+    except Exception as e:
+        print(f"Error: {e}")
+        return {"error": str(e)}
+        
 # superpumped analyst API for completed rides
 # curl -X GET "http://localhost:8000/api/completed_rides"
 @app.get("/api/completed_rides")
